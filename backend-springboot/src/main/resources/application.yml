@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: quiz-gen-backend
+  datasource:
+    url: jdbc:mysql://localhost:3306/quiz_gen_app?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jackson:
+    time-zone: Asia/Shanghai
+
+server:
+  port: 5000
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+app:
+  import-job:
+    chunk-max-retries: 2
+    retry-base-delay-ms: 1200
+    retention-hours: 24
+    timeout-hours: 6
+    max-finished-keep: 200
+  backup-job:
+    max-retries: 2
+    retry-base-delay-ms: 1200
+    retention-hours: 72
+    max-finished-keep: 200
+    stale-processing-minutes: 30
