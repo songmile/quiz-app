@@ -193,14 +193,5 @@ onBeforeUnmount(stopBackupPolling);
 </script>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.row { display: flex; gap: 8px; align-items: center; }
-.wrap { flex-wrap: wrap; }
-.between { justify-content: space-between; }
-.panel { border: 1px solid #dcdfe6; border-radius: 8px; padding: 12px; }
-.btn { border: 1px solid #c9ced6; background: #fff; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
-input { border: 1px solid #c9ced6; border-radius: 6px; padding: 6px 8px; min-width: 260px; }
-pre { white-space: pre-wrap; word-break: break-word; background: #fafbfc; border: 1px solid #eef1f4; border-radius: 6px; padding: 10px; }
-.table { width: 100%; border-collapse: collapse; }
-.table th, .table td { border-bottom: 1px solid #f0f2f5; text-align: left; padding: 8px; }
+input { min-width: 260px; }
 </style>

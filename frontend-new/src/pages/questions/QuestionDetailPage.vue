@@ -26,7 +26,7 @@
         </select>
       </label>
 
-      <label>
+      <label class="full">
         <span>题干</span>
         <textarea v-model="form.text" rows="4" required />
       </label>
@@ -36,22 +36,22 @@
         <input v-model="form.answer" required />
       </label>
 
-      <label>
+      <label class="full">
         <span>解析</span>
         <textarea v-model="form.explanation" rows="4" />
       </label>
 
-      <label>
+      <label class="full">
         <span>标签(逗号分隔)</span>
         <input v-model="tagText" placeholder="如: SQL,索引" />
       </label>
 
-      <label>
+      <label class="full">
         <span>选项(每行 `A. 内容`)</span>
         <textarea v-model="optionText" rows="6" placeholder="A. 选项一\nB. 选项二" />
       </label>
 
-      <div class="row">
+      <div class="row full">
         <button class="btn" :disabled="saving">保存</button>
       </div>
     </form>
@@ -155,12 +155,28 @@ onMounted(load);
 </script>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.row { display: flex; gap: 8px; align-items: center; }
-.between { justify-content: space-between; }
-.panel { border: 1px solid #dcdfe6; border-radius: 8px; padding: 12px; }
-.form { display: grid; gap: 10px; }
-label { display: grid; gap: 6px; }
-input, select, textarea { border: 1px solid #c9ced6; border-radius: 6px; padding: 8px; font: inherit; }
-.btn { border: 1px solid #c9ced6; background: #fff; padding: 6px 10px; border-radius: 6px; cursor: pointer; text-decoration: none; color: #222; }
+.form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+textarea {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .form {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

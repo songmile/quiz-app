@@ -1,15 +1,27 @@
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import { RouterLink } from "vue-router";
 import { createQuestionBackup, restoreQuestionBackup } from "../../api/question";
 const loading = ref(false);
 const error = ref("");
-const result = ref(null);
 const backupId = ref("");
+const result = reactive({
+    backupId: "",
+    filename: "",
+    timestamp: "",
+    questionCount: 0
+});
+function fill(payload) {
+    result.backupId = String(payload.backupId || "");
+    result.filename = String(payload.filename || "");
+    result.timestamp = String(payload.timestamp || "");
+    result.questionCount = Number(payload.questionCount || 0);
+}
 async function backup() {
     loading.value = true;
     error.value = "";
     try {
-        result.value = await createQuestionBackup();
+        fill(await createQuestionBackup());
+        backupId.value = result.backupId;
     }
     catch (e) {
         error.value = e.message;
@@ -24,7 +36,7 @@ async function restore() {
     loading.value = true;
     error.value = "";
     try {
-        result.value = await restoreQuestionBackup(backupId.value.trim());
+        fill(await restoreQuestionBackup(backupId.value));
     }
     catch (e) {
         error.value = e.message;
@@ -43,9 +55,13 @@ __VLS_asFunctionalElement(__VLS_intrinsicElements.section, __VLS_intrinsicElemen
     ...{ class: "page" },
 });
 __VLS_asFunctionalElement(__VLS_intrinsicElements.header, __VLS_intrinsicElements.header)({
-    ...{ class: "row between" },
+    ...{ class: "row between wrap" },
 });
+__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.h2, __VLS_intrinsicElements.h2)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({
+    ...{ class: "hint" },
+});
 const __VLS_0 = {}.RouterLink;
 /** @type {[typeof __VLS_components.RouterLink, typeof __VLS_components.RouterLink, ]} */ ;
 // @ts-ignore
@@ -59,13 +75,30 @@ const __VLS_2 = __VLS_1({
 }, ...__VLS_functionalComponentArgsRest(__VLS_1));
 __VLS_3.slots.default;
 var __VLS_3;
+__VLS_asFunctionalElement(__VLS_intrinsicElements.article, __VLS_intrinsicElements.article)({
+    ...{ class: "panel" },
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.h3, __VLS_intrinsicElements.h3)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({
+    ...{ class: "hint-inline" },
+});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
-    ...{ class: "panel row wrap" },
+    ...{ class: "row top-gap" },
 });
 __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
     ...{ onClick: (__VLS_ctx.backup) },
-    ...{ class: "btn" },
+    ...{ class: "btn primary" },
     disabled: (__VLS_ctx.loading),
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.article, __VLS_intrinsicElements.article)({
+    ...{ class: "panel" },
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.h3, __VLS_intrinsicElements.h3)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({
+    ...{ class: "hint-inline" },
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+    ...{ class: "row wrap top-gap" },
 });
 __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
     placeholder: "输入 backupId 或文件名",
@@ -73,33 +106,75 @@ __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
 (__VLS_ctx.backupId);
 __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
     ...{ onClick: (__VLS_ctx.restore) },
-    ...{ class: "btn" },
+    ...{ class: "btn danger" },
     disabled: (__VLS_ctx.loading || !__VLS_ctx.backupId),
 });
-if (__VLS_ctx.result) {
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
-        ...{ class: "panel" },
-    });
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.pre, __VLS_intrinsicElements.pre)({});
-    (JSON.stringify(__VLS_ctx.result, null, 2));
-}
 if (__VLS_ctx.error) {
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
         ...{ class: "panel" },
     });
     (__VLS_ctx.error);
 }
+if (__VLS_ctx.result.backupId) {
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.article, __VLS_intrinsicElements.article)({
+        ...{ class: "panel" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.h3, __VLS_intrinsicElements.h3)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "kv-grid top-gap" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "kv-item" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.result.backupId);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "kv-item" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.result.filename);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "kv-item" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.result.questionCount);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "kv-item" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.result.timestamp);
+}
 /** @type {__VLS_StyleScopedClasses['page']} */ ;
 /** @type {__VLS_StyleScopedClasses['row']} */ ;
 /** @type {__VLS_StyleScopedClasses['between']} */ ;
+/** @type {__VLS_StyleScopedClasses['wrap']} */ ;
+/** @type {__VLS_StyleScopedClasses['hint']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['hint-inline']} */ ;
+/** @type {__VLS_StyleScopedClasses['row']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
+/** @type {__VLS_StyleScopedClasses['btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['primary']} */ ;
+/** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['hint-inline']} */ ;
 /** @type {__VLS_StyleScopedClasses['row']} */ ;
 /** @type {__VLS_StyleScopedClasses['wrap']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
-/** @type {__VLS_StyleScopedClasses['btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['danger']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
 var __VLS_dollars;
 const __VLS_self = (await import('vue')).defineComponent({
     setup() {
@@ -107,8 +182,8 @@ const __VLS_self = (await import('vue')).defineComponent({
             RouterLink: RouterLink,
             loading: loading,
             error: error,
-            result: result,
             backupId: backupId,
+            result: result,
             backup: backup,
             restore: restore,
         };

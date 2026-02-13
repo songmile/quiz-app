@@ -1,19 +1,22 @@
-﻿<template>
+<template>
   <section class="page">
-    <header class="row between">
-      <h2>字体设置</h2>
+    <header class="row between wrap">
+      <div>
+        <h2>字体设置</h2>
+        <p class="hint">统一调整阅读字号，避免页面间视觉跳变。</p>
+      </div>
       <button class="btn" :disabled="loading" @click="load">刷新</button>
     </header>
 
     <div class="panel" v-if="error">{{ error }}</div>
 
     <form class="panel grid" @submit.prevent="save">
-      <label v-for="key in keys" :key="key">
-        {{ key }}
-        <input v-model.number="fonts[key]" type="number" min="8" max="64" />
+      <label v-for="item in fields" :key="item.key">
+        {{ item.label }}
+        <input v-model.number="fonts[item.key]" type="number" min="8" max="64" />
       </label>
       <div class="row full">
-        <button class="btn" :disabled="loading">保存字体设置</button>
+        <button class="btn primary" :disabled="loading">保存字体设置</button>
       </div>
     </form>
   </section>
@@ -23,14 +26,14 @@
 import { onMounted, reactive, ref } from "vue";
 import { getSettings, updateFontSettings } from "../../api/settings";
 
-const keys = [
-  "question_font_size",
-  "option_font_size",
-  "answer_font_size",
-  "explanation_font_size",
-  "ai_font_size",
-  "error_font_size",
-  "variant_font_size"
+const fields = [
+  { key: "question_font_size", label: "题干字号" },
+  { key: "option_font_size", label: "选项字号" },
+  { key: "answer_font_size", label: "答案字号" },
+  { key: "explanation_font_size", label: "解析字号" },
+  { key: "ai_font_size", label: "AI 结果字号" },
+  { key: "error_font_size", label: "错因字号" },
+  { key: "variant_font_size", label: "变式题字号" }
 ] as const;
 
 const loading = ref(false);
@@ -42,7 +45,9 @@ async function load() {
   error.value = "";
   try {
     const settings = await getSettings();
-    keys.forEach((k) => { fonts[k] = Number(settings.font_settings?.[k] ?? 11); });
+    fields.forEach((field) => {
+      fonts[field.key] = Number(settings.font_settings?.[field.key] ?? 11);
+    });
   } catch (e) {
     error.value = (e as Error).message;
   } finally {
@@ -67,13 +72,30 @@ onMounted(load);
 </script>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.row { display: flex; gap: 8px; align-items: center; }
-.between { justify-content: space-between; }
-.panel { border: 1px solid #dcdfe6; border-radius: 8px; padding: 12px; }
-.grid { display: grid; grid-template-columns: repeat(2, minmax(260px, 1fr)); gap: 8px; }
-.full { grid-column: 1 / -1; }
-label { display: grid; gap: 6px; }
-input { border: 1px solid #c9ced6; border-radius: 6px; padding: 6px 8px; }
-.btn { border: 1px solid #c9ced6; background: #fff; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
+.hint {
+  margin: 6px 0 0;
+  color: #756954;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  color: #5f513e;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

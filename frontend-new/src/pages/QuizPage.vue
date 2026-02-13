@@ -278,26 +278,50 @@ function cardClass(idx: number) {
 </script>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.row { display: flex; gap: 8px; align-items: center; }
-.wrap { flex-wrap: wrap; }
-.between { justify-content: space-between; }
-.panel { border: 1px solid #dcdfe6; border-radius: 8px; padding: 12px; }
-.btn { border: 1px solid #c9ced6; background: #fff; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
-.btn.primary { border-color: #4f46e5; color: #312e81; }
 .check { font-size: 13px; }
-.question { line-height: 1.6; }
+.question {
+  line-height: 1.8;
+  font-size: 16px;
+}
 .options { display: grid; gap: 8px; margin-top: 8px; }
-.opt { text-align: left; border: 1px solid #d2d8e0; background: #fff; border-radius: 8px; padding: 8px 10px; cursor: pointer; }
-.opt.selected { border-color: #4f46e5; background: #eef2ff; }
-input, textarea { border: 1px solid #c9ced6; border-radius: 6px; padding: 8px; min-width: 260px; }
+
+.opt {
+  text-align: left;
+  border: 1px solid #d7cbb8;
+  background: linear-gradient(180deg, #fffefb 0%, #f9f3e8 100%);
+  border-radius: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.opt:hover {
+  border-color: #c2ad8a;
+}
+
+.opt.selected {
+  border-color: #128274;
+  background: linear-gradient(180deg, #eaf8f6 0%, #dff1ee 100%);
+}
+
+input,
+textarea {
+  min-width: 260px;
+}
+
 textarea { width: 100%; }
 .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 6px; }
-.card-btn { border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 0; background: #fff; cursor: pointer; }
-.card-btn.current { border-color: #2563eb; background: #dbeafe; }
-.card-btn.correct { border-color: #16a34a; background: #dcfce7; }
-.card-btn.wrong { border-color: #dc2626; background: #fee2e2; }
-.card-btn.unanswered { border-color: #d1d5db; }
+.card-btn {
+  border: 1px solid #d1c4ae;
+  border-radius: 8px;
+  padding: 7px 0;
+  background: #fffdf8;
+  cursor: pointer;
+}
+
+.card-btn.current { border-color: #0f766e; background: #ddf3f0; }
+.card-btn.correct { border-color: #3d8e4f; background: #e5f5df; }
+.card-btn.wrong { border-color: #cc5a2f; background: #fee8df; }
+.card-btn.unanswered { border-color: #d1c4ae; }
 .top-gap { margin-top: 10px; }
-pre { white-space: pre-wrap; word-break: break-word; }
 </style>

@@ -1,45 +1,58 @@
-﻿<template>
+<template>
   <section class="page">
-    <header class="row between">
-      <h2>题库管理</h2>
-      <RouterLink class="btn" to="/questions">返回列表</RouterLink>
+    <header class="row between wrap">
+      <div>
+        <h2>题库管理</h2>
+        <p class="hint">维护题库名称和描述，便于分类训练。</p>
+      </div>
+      <RouterLink class="btn" to="/questions">返回题目列表</RouterLink>
     </header>
 
-    <form class="panel row wrap" @submit.prevent="create">
-      <input v-model="name" placeholder="题库名称" required />
-      <input v-model="description" placeholder="题库描述" />
-      <button class="btn" :disabled="loading">新建题库</button>
+    <form class="panel form-grid" @submit.prevent="create">
+      <label>
+        题库名称
+        <input v-model.trim="name" placeholder="如：数据库基础" required />
+      </label>
+      <label>
+        题库描述
+        <input v-model.trim="description" placeholder="可选描述" />
+      </label>
+      <div class="row full">
+        <button class="btn primary" :disabled="loading || !name">新建题库</button>
+      </div>
     </form>
 
     <div class="panel" v-if="error">{{ error }}</div>
 
-    <div class="panel">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>名称</th>
-            <th>描述</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in banks" :key="item.id">
-            <td>{{ item.id }}</td>
-            <td>
-              <input v-model="item.name" />
-            </td>
-            <td>
-              <input v-model="item.description" />
-            </td>
-            <td class="row">
-              <button class="btn" @click="save(item)">保存</button>
-              <button class="btn danger" @click="remove(item.id)">删除</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <article class="panel">
+      <h3>已有题库</h3>
+      <div class="table-wrap top-gap">
+        <table>
+          <thead>
+            <tr>
+              <th>编号</th>
+              <th>名称</th>
+              <th>描述</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in banks" :key="item.id">
+              <td>{{ item.id }}</td>
+              <td><input v-model.trim="item.name" /></td>
+              <td><input v-model.trim="item.description" /></td>
+              <td class="row wrap">
+                <button class="btn" @click="save(item)">保存</button>
+                <button class="btn danger" @click="remove(item.id)">删除</button>
+              </td>
+            </tr>
+            <tr v-if="banks.length === 0">
+              <td colspan="4">暂无题库</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
   </section>
 </template>
 
@@ -70,7 +83,7 @@ async function create() {
   loading.value = true;
   error.value = "";
   try {
-    await createBank({ name: name.value.trim(), description: description.value.trim() || undefined });
+    await createBank({ name: name.value, description: description.value || undefined });
     name.value = "";
     description.value = "";
     await load();
@@ -83,7 +96,7 @@ async function create() {
 
 async function save(item: BankItem) {
   try {
-    await updateBank(item.id, { name: item.name.trim(), description: item.description?.trim() || undefined });
+    await updateBank(item.id, { name: item.name, description: item.description || undefined });
     await load();
   } catch (e) {
     alert((e as Error).message);
@@ -104,14 +117,34 @@ onMounted(load);
 </script>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.row { display: flex; gap: 8px; align-items: center; }
-.wrap { flex-wrap: wrap; }
-.between { justify-content: space-between; }
-.panel { border: 1px solid #dcdfe6; border-radius: 8px; padding: 12px; }
-.btn { border: 1px solid #c9ced6; background: #fff; padding: 6px 10px; border-radius: 6px; cursor: pointer; text-decoration: none; color: #222; }
-.btn.danger { border-color: #e06c75; color: #c0392b; }
-.table { width: 100%; border-collapse: collapse; }
-.table th, .table td { border-bottom: 1px solid #f0f2f5; text-align: left; padding: 8px; }
-input { border: 1px solid #c9ced6; border-radius: 6px; padding: 6px 8px; width: 100%; }
+.hint {
+  margin: 6px 0 0;
+  color: #756954;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  color: #5f513e;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.top-gap {
+  margin-top: 10px;
+}
+
+@media (max-width: 900px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

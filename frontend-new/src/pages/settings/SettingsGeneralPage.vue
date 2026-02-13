@@ -112,13 +112,6 @@ onMounted(load);
 </script>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.row { display: flex; gap: 8px; align-items: center; }
-.between { justify-content: space-between; }
-.panel { border: 1px solid #dcdfe6; border-radius: 8px; padding: 12px; }
 .form { display: grid; gap: 10px; }
-label { display: grid; gap: 6px; }
-input { border: 1px solid #c9ced6; border-radius: 6px; padding: 6px 8px; }
-.btn { border: 1px solid #c9ced6; background: #fff; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
-.btn.danger { border-color: #e06c75; color: #c0392b; }
+label { display: grid; gap: 6px; color: #5f513e; }
 </style>

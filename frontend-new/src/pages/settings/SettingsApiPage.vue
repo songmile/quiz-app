@@ -75,14 +75,14 @@ onMounted(load);
 </script>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.row { display: flex; gap: 8px; align-items: center; }
-.between { justify-content: space-between; }
-.panel { border: 1px solid #dcdfe6; border-radius: 8px; padding: 12px; display: grid; gap: 8px; }
+.panel { display: grid; gap: 8px; }
 .grid { display: grid; grid-template-columns: repeat(2, minmax(260px, 1fr)); gap: 8px; }
-label { display: grid; gap: 6px; }
-input { border: 1px solid #c9ced6; border-radius: 6px; padding: 6px 8px; }
-.btn { border: 1px solid #c9ced6; background: #fff; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
-pre { white-space: pre-wrap; word-break: break-word; background: #fafbfc; border: 1px solid #eef1f4; border-radius: 6px; padding: 10px; }
+label { display: grid; gap: 6px; color: #5f513e; }
 .top-gap { margin-top: 8px; }
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

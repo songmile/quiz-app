@@ -201,7 +201,7 @@ debugger; /* PartiallyEnd: #3632/scriptSetup.vue */
 const __VLS_ctx = {};
 let __VLS_components;
 let __VLS_directives;
-/** @type {__VLS_StyleScopedClasses['btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['opt']} */ ;
 /** @type {__VLS_StyleScopedClasses['opt']} */ ;
 /** @type {__VLS_StyleScopedClasses['card-btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['card-btn']} */ ;

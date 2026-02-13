@@ -31,7 +31,7 @@
 
     <div class="panel" v-if="error">{{ error }}</div>
 
-    <div class="panel">
+    <div class="panel table-wrap">
       <table class="table">
         <thead>
           <tr>
@@ -138,16 +138,10 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.row { display: flex; gap: 8px; align-items: center; }
-.wrap { flex-wrap: wrap; }
-.between { justify-content: space-between; }
-.panel { border: 1px solid #dcdfe6; border-radius: 8px; padding: 12px; }
-.btn { border: 1px solid #c9ced6; background: #fff; padding: 6px 10px; border-radius: 6px; cursor: pointer; text-decoration: none; color: #222; }
-.btn.danger { border-color: #e06c75; color: #c0392b; }
-.table { width: 100%; border-collapse: collapse; }
-.table th, .table td { border-bottom: 1px solid #f0f2f5; text-align: left; padding: 8px; vertical-align: top; }
+.table {
+  min-width: 860px;
+}
+
 .ellipsis { max-width: 560px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .top-gap { margin-top: 10px; }
-input, select { border: 1px solid #c9ced6; border-radius: 6px; padding: 6px 8px; }
 </style>
