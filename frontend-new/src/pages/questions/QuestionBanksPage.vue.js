@@ -23,7 +23,7 @@ async function create() {
     loading.value = true;
     error.value = "";
     try {
-        await createBank({ name: name.value.trim(), description: description.value.trim() || undefined });
+        await createBank({ name: name.value, description: description.value || undefined });
         name.value = "";
         description.value = "";
         await load();
@@ -37,7 +37,7 @@ async function create() {
 }
 async function save(item) {
     try {
-        await updateBank(item.id, { name: item.name.trim(), description: item.description?.trim() || undefined });
+        await updateBank(item.id, { name: item.name, description: item.description || undefined });
         await load();
     }
     catch (e) {
@@ -60,18 +60,20 @@ debugger; /* PartiallyEnd: #3632/scriptSetup.vue */
 const __VLS_ctx = {};
 let __VLS_components;
 let __VLS_directives;
-/** @type {__VLS_StyleScopedClasses['btn']} */ ;
-/** @type {__VLS_StyleScopedClasses['table']} */ ;
-/** @type {__VLS_StyleScopedClasses['table']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-grid']} */ ;
 // CSS variable injection 
 // CSS variable injection end 
 __VLS_asFunctionalElement(__VLS_intrinsicElements.section, __VLS_intrinsicElements.section)({
     ...{ class: "page" },
 });
 __VLS_asFunctionalElement(__VLS_intrinsicElements.header, __VLS_intrinsicElements.header)({
-    ...{ class: "row between" },
+    ...{ class: "row between wrap" },
 });
+__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.h2, __VLS_intrinsicElements.h2)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({
+    ...{ class: "hint" },
+});
 const __VLS_0 = {}.RouterLink;
 /** @type {[typeof __VLS_components.RouterLink, typeof __VLS_components.RouterLink, ]} */ ;
 // @ts-ignore
@@ -87,20 +89,25 @@ __VLS_3.slots.default;
 var __VLS_3;
 __VLS_asFunctionalElement(__VLS_intrinsicElements.form, __VLS_intrinsicElements.form)({
     ...{ onSubmit: (__VLS_ctx.create) },
-    ...{ class: "panel row wrap" },
+    ...{ class: "panel form-grid" },
 });
+__VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-    placeholder: "题库名称",
+    placeholder: "如：数据库基础",
     required: true,
 });
 (__VLS_ctx.name);
+__VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
-    placeholder: "题库描述",
+    placeholder: "可选描述",
 });
 (__VLS_ctx.description);
+__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+    ...{ class: "row full" },
+});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
-    ...{ class: "btn" },
-    disabled: (__VLS_ctx.loading),
+    ...{ class: "btn primary" },
+    disabled: (__VLS_ctx.loading || !__VLS_ctx.name),
 });
 if (__VLS_ctx.error) {
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
@@ -108,12 +115,14 @@ if (__VLS_ctx.error) {
     });
     (__VLS_ctx.error);
 }
-__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+__VLS_asFunctionalElement(__VLS_intrinsicElements.article, __VLS_intrinsicElements.article)({
     ...{ class: "panel" },
 });
-__VLS_asFunctionalElement(__VLS_intrinsicElements.table, __VLS_intrinsicElements.table)({
-    ...{ class: "table" },
+__VLS_asFunctionalElement(__VLS_intrinsicElements.h3, __VLS_intrinsicElements.h3)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+    ...{ class: "table-wrap top-gap" },
 });
+__VLS_asFunctionalElement(__VLS_intrinsicElements.table, __VLS_intrinsicElements.table)({});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.thead, __VLS_intrinsicElements.thead)({});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.th, __VLS_intrinsicElements.th)({});
@@ -134,7 +143,7 @@ for (const [item] of __VLS_getVForSourceType((__VLS_ctx.banks))) {
     __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({});
     (item.description);
     __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
-        ...{ class: "row" },
+        ...{ class: "row wrap" },
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
         ...{ onClick: (...[$event]) => {
@@ -149,18 +158,30 @@ for (const [item] of __VLS_getVForSourceType((__VLS_ctx.banks))) {
         ...{ class: "btn danger" },
     });
 }
+if (__VLS_ctx.banks.length === 0) {
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.tr, __VLS_intrinsicElements.tr)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.td, __VLS_intrinsicElements.td)({
+        colspan: "4",
+    });
+}
 /** @type {__VLS_StyleScopedClasses['page']} */ ;
 /** @type {__VLS_StyleScopedClasses['row']} */ ;
 /** @type {__VLS_StyleScopedClasses['between']} */ ;
+/** @type {__VLS_StyleScopedClasses['wrap']} */ ;
+/** @type {__VLS_StyleScopedClasses['hint']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['row']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
+/** @type {__VLS_StyleScopedClasses['btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['primary']} */ ;
+/** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['table-wrap']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
 /** @type {__VLS_StyleScopedClasses['row']} */ ;
 /** @type {__VLS_StyleScopedClasses['wrap']} */ ;
-/** @type {__VLS_StyleScopedClasses['btn']} */ ;
-/** @type {__VLS_StyleScopedClasses['panel']} */ ;
-/** @type {__VLS_StyleScopedClasses['panel']} */ ;
-/** @type {__VLS_StyleScopedClasses['table']} */ ;
-/** @type {__VLS_StyleScopedClasses['row']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['danger']} */ ;

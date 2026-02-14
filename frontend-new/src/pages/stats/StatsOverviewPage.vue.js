@@ -22,15 +22,24 @@ const categoryRows = computed(() => {
     return Object.entries(categories.value || {}).map(([type, data]) => {
         const row = (data || {});
         return {
-            type,
-            total: row.total ?? 0,
-            answered: row.answered ?? 0,
-            correct: row.correct ?? 0,
-            correctRate: row.correctRate ?? "0.0"
+            type: String(type),
+            total: Number(row.total ?? 0),
+            answered: Number(row.answered ?? 0),
+            correct: Number(row.correct ?? 0),
+            correctRate: String(row.correctRate ?? "0.0")
         };
     });
 });
-const recentSessions = computed(() => sessions.value.slice(0, 8));
+const recentSessions = computed(() => {
+    return sessions.value.slice(0, 8).map((row) => ({
+        id: String(row.id ?? ""),
+        mode: String(row.mode ?? ""),
+        start_time: String(row.start_time ?? ""),
+        end_time: String(row.end_time ?? ""),
+        questions_answered: Number(row.questions_answered ?? 0),
+        correctRate: String(row.correctRate ?? "0.0")
+    }));
+});
 async function loadAll() {
     loading.value = true;
     error.value = "";

@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import { RouterLink } from "vue-router";
-import { createQuestionBackup, restoreQuestionBackup } from "../../api/question";
+import { createQuestionBackup, restoreQuestionBackup, type QuestionBackupResult } from "../../api/question";
 
 const loading = ref(false);
 const error = ref("");
@@ -66,7 +66,7 @@ const result = reactive({
   questionCount: 0
 });
 
-function fill(payload: Record<string, unknown>) {
+function fill(payload: QuestionBackupResult) {
   result.backupId = String(payload.backupId || "");
   result.filename = String(payload.filename || "");
   result.timestamp = String(payload.timestamp || "");

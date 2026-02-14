@@ -64,9 +64,32 @@
       </div>
     </article>
 
-    <article class="panel" v-if="resultText.length">
+    <article class="panel" v-if="resultObj">
       <h3>最近操作结果</h3>
-      <pre>{{ resultText }}</pre>
+      <div class="kv-grid top-gap">
+        <div class="kv-item" v-for="item in resultCards" :key="item.label">
+          <small>{{ item.label }}</small>
+          <strong>{{ item.value }}</strong>
+        </div>
+      </div>
+      <div class="table-wrap top-gap" v-if="resultPreview.length">
+        <table>
+          <thead>
+            <tr>
+              <th>题号</th>
+              <th>题型</th>
+              <th>题干</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in resultPreview" :key="row.id">
+              <td>{{ row.id }}</td>
+              <td>{{ row.type }}</td>
+              <td>{{ row.text }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </article>
 
     <div class="panel" v-if="error">{{ error }}</div>
@@ -81,7 +104,7 @@ import { getImportStatus, importQuestionsWithAi, importTextQuestions, type Impor
 
 const loading = ref(false);
 const error = ref("");
-const resultText = ref("");
+const resultObj = ref<Record<string, unknown> | null>(null);
 const status = ref<ImportStatus | null>(null);
 const pollTimer = ref<number | null>(null);
 
@@ -90,6 +113,32 @@ const bankId = ref("");
 const textContent = ref("");
 const aiContent = ref("");
 const banks = ref<BankItem[]>([]);
+
+const resultCards = ref<Array<{ label: string; value: string }>>([]);
+const resultPreview = ref<Array<{ id: string; type: string; text: string }>>([]);
+
+function buildResultView(data: Record<string, unknown>) {
+  const cards: Array<{ label: string; value: string }> = [];
+  if (data.message) cards.push({ label: "消息", value: String(data.message) });
+  if (data.importId) cards.push({ label: "导入任务ID", value: String(data.importId) });
+  if (data.mode) cards.push({ label: "模式", value: String(data.mode) });
+  if (data.parsedCount !== undefined) cards.push({ label: "解析数", value: String(data.parsedCount) });
+  if (data.insertedCount !== undefined) cards.push({ label: "插入数", value: String(data.insertedCount) });
+  if (data.duplicateCount !== undefined) cards.push({ label: "重复数", value: String(data.duplicateCount) });
+  if (cards.length === 0) {
+    Object.entries(data)
+      .filter(([, value]) => value === null || ["string", "number", "boolean"].includes(typeof value))
+      .forEach(([key, value]) => cards.push({ label: key, value: String(value ?? "-") }));
+  }
+  resultCards.value = cards;
+
+  const list = Array.isArray(data.data) ? data.data as Array<Record<string, unknown>> : [];
+  resultPreview.value = list.slice(0, 10).map((item) => ({
+    id: String(item.id || ""),
+    type: String(item.type || ""),
+    text: String(item.text || "")
+  }));
+}
 
 async function loadBanks() {
   try {
@@ -102,10 +151,13 @@ async function loadBanks() {
 async function importText() {
   loading.value = true;
   error.value = "";
-  resultText.value = "";
+  resultObj.value = null;
+  resultCards.value = [];
+  resultPreview.value = [];
   try {
-    const data = await importTextQuestions(textContent.value, mode.value, bankId.value || null);
-    resultText.value = JSON.stringify(data, null, 2);
+    const data = await importTextQuestions(textContent.value, mode.value, bankId.value || null) as Record<string, unknown>;
+    resultObj.value = data;
+    buildResultView(data);
   } catch (e) {
     error.value = (e as Error).message;
   } finally {
@@ -139,11 +191,14 @@ function startPolling(importId: string) {
 async function importAi() {
   loading.value = true;
   error.value = "";
-  resultText.value = "";
+  resultObj.value = null;
+  resultCards.value = [];
+  resultPreview.value = [];
   status.value = null;
   try {
     const data = await importQuestionsWithAi(aiContent.value, mode.value, bankId.value || null);
-    resultText.value = JSON.stringify(data, null, 2);
+    resultObj.value = data;
+    buildResultView(data as unknown as Record<string, unknown>);
     startPolling(data.importId);
   } catch (e) {
     error.value = (e as Error).message;

@@ -38,7 +38,7 @@ async function test(index) {
         testResult.value[index] = await testConnection(index);
     }
     catch (e) {
-        testResult.value[index] = { error: e.message };
+        testResult.value[index] = { success: false, message: e.message };
     }
 }
 onMounted(load);
@@ -46,6 +46,9 @@ debugger; /* PartiallyEnd: #3632/scriptSetup.vue */
 const __VLS_ctx = {};
 let __VLS_components;
 let __VLS_directives;
+/** @type {__VLS_StyleScopedClasses['state']} */ ;
+/** @type {__VLS_StyleScopedClasses['state']} */ ;
+/** @type {__VLS_StyleScopedClasses['debug']} */ ;
 /** @type {__VLS_StyleScopedClasses['grid']} */ ;
 // CSS variable injection 
 // CSS variable injection end 
@@ -128,6 +131,24 @@ for (const [cfg, idx] of __VLS_getVForSourceType((__VLS_ctx.configs))) {
         disabled: (__VLS_ctx.loading),
     });
     if (__VLS_ctx.testResult[idx]) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "test-line" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({
+            ...{ class: "state" },
+            ...{ class: (__VLS_ctx.testResult[idx].success ? 'ok' : 'bad') },
+        });
+        (__VLS_ctx.testResult[idx].success ? "连接成功" : "连接失败");
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({
+            ...{ class: "message" },
+        });
+        (__VLS_ctx.testResult[idx].message || "-");
+    }
+    if (__VLS_ctx.testResult[idx]) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.details, __VLS_intrinsicElements.details)({
+            ...{ class: "debug" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.summary, __VLS_intrinsicElements.summary)({});
         __VLS_asFunctionalElement(__VLS_intrinsicElements.pre, __VLS_intrinsicElements.pre)({});
         (JSON.stringify(__VLS_ctx.testResult[idx], null, 2));
     }
@@ -144,6 +165,10 @@ for (const [cfg, idx] of __VLS_getVForSourceType((__VLS_ctx.configs))) {
 /** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['test-line']} */ ;
+/** @type {__VLS_StyleScopedClasses['state']} */ ;
+/** @type {__VLS_StyleScopedClasses['message']} */ ;
+/** @type {__VLS_StyleScopedClasses['debug']} */ ;
 var __VLS_dollars;
 const __VLS_self = (await import('vue')).defineComponent({
     setup() {

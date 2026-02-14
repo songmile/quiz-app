@@ -14,6 +14,24 @@ const autoNext = ref(true);
 const result = ref(null);
 const cardStatusMap = ref({});
 const cardIndexes = computed(() => Array.from({ length: totalQuestions.value }, (_, i) => i));
+const reviewStats = computed(() => ({
+    dueCount: Number(dueStats.value.dueCount || 0),
+    totalCards: Number(dueStats.value.totalCards || 0),
+    masteredCount: Number(dueStats.value.masteredCount || 0),
+    learningCount: Number(dueStats.value.learningCount || 0),
+    newCount: Number(dueStats.value.newCount || 0)
+}));
+const resultData = computed(() => {
+    if (!result.value)
+        return null;
+    return {
+        questionId: String(result.value.questionId || ""),
+        isCorrect: Boolean(result.value.isCorrect),
+        userAnswer: String(result.value.userAnswer || ""),
+        correctAnswer: String(result.value.correctAnswer || ""),
+        explanation: String(result.value.explanation || "")
+    };
+});
 function normalizeAnswer() {
     if (selectedOptions.value.length > 0) {
         const sorted = [...selectedOptions.value].sort();
@@ -207,6 +225,10 @@ let __VLS_directives;
 /** @type {__VLS_StyleScopedClasses['card-btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['card-btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['card-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['result-flag']} */ ;
+/** @type {__VLS_StyleScopedClasses['result-flag']} */ ;
+/** @type {__VLS_StyleScopedClasses['explain-box']} */ ;
+/** @type {__VLS_StyleScopedClasses['explain-box']} */ ;
 // CSS variable injection 
 // CSS variable injection end 
 __VLS_asFunctionalElement(__VLS_intrinsicElements.section, __VLS_intrinsicElements.section)({
@@ -246,8 +268,39 @@ __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.d
     ...{ class: "panel" },
 });
 __VLS_asFunctionalElement(__VLS_intrinsicElements.h3, __VLS_intrinsicElements.h3)({});
-__VLS_asFunctionalElement(__VLS_intrinsicElements.pre, __VLS_intrinsicElements.pre)({});
-(JSON.stringify(__VLS_ctx.dueStats, null, 2));
+__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+    ...{ class: "kv-grid top-gap" },
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+    ...{ class: "kv-item" },
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+(__VLS_ctx.reviewStats.dueCount);
+__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+    ...{ class: "kv-item" },
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+(__VLS_ctx.reviewStats.totalCards);
+__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+    ...{ class: "kv-item" },
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+(__VLS_ctx.reviewStats.masteredCount);
+__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+    ...{ class: "kv-item" },
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+(__VLS_ctx.reviewStats.learningCount);
+__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+    ...{ class: "kv-item" },
+});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+(__VLS_ctx.reviewStats.newCount);
 if (!__VLS_ctx.current) {
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
         ...{ class: "panel" },
@@ -345,13 +398,51 @@ if (__VLS_ctx.current) {
         }
     }
 }
-if (__VLS_ctx.result) {
+if (__VLS_ctx.resultData) {
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
         ...{ class: "panel" },
     });
     __VLS_asFunctionalElement(__VLS_intrinsicElements.h3, __VLS_intrinsicElements.h3)({});
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.pre, __VLS_intrinsicElements.pre)({});
-    (JSON.stringify(__VLS_ctx.result, null, 2));
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "kv-grid top-gap" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "kv-item" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.resultData.questionId);
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "kv-item" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.resultData.isCorrect ? "正确" : "错误");
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "kv-item" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.resultData.userAnswer || "-");
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+        ...{ class: "kv-item" },
+    });
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+    (__VLS_ctx.resultData.correctAnswer || "-");
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({
+        ...{ class: "result-flag top-gap" },
+        ...{ class: (__VLS_ctx.resultData.isCorrect ? 'ok' : 'bad') },
+    });
+    (__VLS_ctx.resultData.isCorrect ? "复习通过，本题可延后复习。" : "复习未通过，建议尽快再次练习。");
+    if (__VLS_ctx.resultData.explanation) {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "explain-box top-gap" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.h4, __VLS_intrinsicElements.h4)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.p, __VLS_intrinsicElements.p)({});
+        (__VLS_ctx.resultData.explanation);
+    }
 }
 /** @type {__VLS_StyleScopedClasses['page']} */ ;
 /** @type {__VLS_StyleScopedClasses['row']} */ ;
@@ -364,6 +455,13 @@ if (__VLS_ctx.result) {
 /** @type {__VLS_StyleScopedClasses['check']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
 /** @type {__VLS_StyleScopedClasses['row']} */ ;
@@ -382,21 +480,31 @@ if (__VLS_ctx.result) {
 /** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
 /** @type {__VLS_StyleScopedClasses['card-btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['result-flag']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
+/** @type {__VLS_StyleScopedClasses['explain-box']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
 var __VLS_dollars;
 const __VLS_self = (await import('vue')).defineComponent({
     setup() {
         return {
             loading: loading,
             error: error,
-            dueStats: dueStats,
             current: current,
             currentIndex: currentIndex,
             totalQuestions: totalQuestions,
             answerInput: answerInput,
             selectedOptions: selectedOptions,
             autoNext: autoNext,
-            result: result,
             cardIndexes: cardIndexes,
+            reviewStats: reviewStats,
+            resultData: resultData,
             toggleOption: toggleOption,
             refreshDue: refreshDue,
             start: start,

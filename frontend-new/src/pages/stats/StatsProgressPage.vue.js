@@ -13,8 +13,26 @@ const masteryCards = computed(() => [
     { label: "待复习", value: String(mastery.value.dueCount ?? 0) },
     { label: "掌握率", value: `${mastery.value.masteryRate ?? "0.0"}%` }
 ]);
-const bankRows = computed(() => bankProgress.value);
-const tagRows = computed(() => tagProgress.value);
+const bankRows = computed(() => {
+    return bankProgress.value.map((row) => ({
+        bankName: String(row.bankName ?? "-"),
+        totalQuestions: Number(row.totalQuestions ?? 0),
+        answeredCount: Number(row.answeredCount ?? 0),
+        correctCount: Number(row.correctCount ?? 0),
+        correctRate: String(row.correctRate ?? "0.0"),
+        masteryRate: String(row.masteryRate ?? "0.0")
+    }));
+});
+const tagRows = computed(() => {
+    return tagProgress.value.map((row) => ({
+        tag: String(row.tag ?? "-"),
+        totalQuestions: Number(row.totalQuestions ?? 0),
+        answeredCount: Number(row.answeredCount ?? 0),
+        correctCount: Number(row.correctCount ?? 0),
+        correctRate: String(row.correctRate ?? "0.0"),
+        masteryRate: String(row.masteryRate ?? "0.0")
+    }));
+});
 async function load() {
     loading.value = true;
     error.value = "";

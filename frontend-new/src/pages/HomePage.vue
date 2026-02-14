@@ -62,7 +62,12 @@ const streakEntries = computed(() => Object.entries(streak.value || {}));
 
 function formatValue(value: unknown) {
   if (value === null || value === undefined) return "-";
-  if (typeof value === "object") return JSON.stringify(value);
+  if (typeof value === "object") {
+    const row = value as Record<string, unknown>;
+    if (row.formatted) return String(row.formatted);
+    if (row.value) return String(row.value);
+    return "-";
+  }
   return String(value);
 }
 

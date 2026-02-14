@@ -13,7 +13,28 @@
 
     <div class="panel">
       <h3>复习统计</h3>
-      <pre>{{ JSON.stringify(dueStats, null, 2) }}</pre>
+      <div class="kv-grid top-gap">
+        <div class="kv-item">
+          <small>待复习</small>
+          <strong>{{ reviewStats.dueCount }}</strong>
+        </div>
+        <div class="kv-item">
+          <small>卡片总数</small>
+          <strong>{{ reviewStats.totalCards }}</strong>
+        </div>
+        <div class="kv-item">
+          <small>已掌握</small>
+          <strong>{{ reviewStats.masteredCount }}</strong>
+        </div>
+        <div class="kv-item">
+          <small>学习中</small>
+          <strong>{{ reviewStats.learningCount }}</strong>
+        </div>
+        <div class="kv-item">
+          <small>新卡片</small>
+          <strong>{{ reviewStats.newCount }}</strong>
+        </div>
+      </div>
     </div>
 
     <div class="panel" v-if="!current">点击“开始复习”进入会话。</div>
@@ -67,9 +88,33 @@
       </div>
     </div>
 
-    <div class="panel" v-if="result">
+    <div class="panel" v-if="resultData">
       <h3>本题结果</h3>
-      <pre>{{ JSON.stringify(result, null, 2) }}</pre>
+      <div class="kv-grid top-gap">
+        <div class="kv-item">
+          <small>题号</small>
+          <strong>{{ resultData.questionId }}</strong>
+        </div>
+        <div class="kv-item">
+          <small>判定</small>
+          <strong>{{ resultData.isCorrect ? "正确" : "错误" }}</strong>
+        </div>
+        <div class="kv-item">
+          <small>你的答案</small>
+          <strong>{{ resultData.userAnswer || "-" }}</strong>
+        </div>
+        <div class="kv-item">
+          <small>标准答案</small>
+          <strong>{{ resultData.correctAnswer || "-" }}</strong>
+        </div>
+      </div>
+      <p class="result-flag top-gap" :class="resultData.isCorrect ? 'ok' : 'bad'">
+        {{ resultData.isCorrect ? "复习通过，本题可延后复习。" : "复习未通过，建议尽快再次练习。" }}
+      </p>
+      <div class="explain-box top-gap" v-if="resultData.explanation">
+        <h4>解析</h4>
+        <p>{{ resultData.explanation }}</p>
+      </div>
     </div>
   </section>
 </template>
@@ -92,10 +137,27 @@ const totalQuestions = ref(0);
 const answerInput = ref("");
 const selectedOptions = ref<string[]>([]);
 const autoNext = ref(true);
-const result = ref<unknown>(null);
+const result = ref<Record<string, unknown> | null>(null);
 const cardStatusMap = ref<Record<number, CardStatus>>({});
 
 const cardIndexes = computed(() => Array.from({ length: totalQuestions.value }, (_, i) => i));
+const reviewStats = computed(() => ({
+  dueCount: Number(dueStats.value.dueCount || 0),
+  totalCards: Number(dueStats.value.totalCards || 0),
+  masteredCount: Number(dueStats.value.masteredCount || 0),
+  learningCount: Number(dueStats.value.learningCount || 0),
+  newCount: Number(dueStats.value.newCount || 0)
+}));
+const resultData = computed(() => {
+  if (!result.value) return null;
+  return {
+    questionId: String(result.value.questionId || ""),
+    isCorrect: Boolean(result.value.isCorrect),
+    userAnswer: String(result.value.userAnswer || ""),
+    correctAnswer: String(result.value.correctAnswer || ""),
+    explanation: String(result.value.explanation || "")
+  };
+});
 
 function normalizeAnswer() {
   if (selectedOptions.value.length > 0) {
@@ -326,4 +388,40 @@ textarea { width: 100%; }
 .card-btn.wrong { border-color: #cc5a2f; background: #fee8df; }
 .card-btn.unanswered { border-color: #d1c4ae; }
 .top-gap { margin-top: 10px; }
+
+.result-flag {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.result-flag.ok {
+  background: #e4f4df;
+  border: 1px solid #b8d5ae;
+  color: #2f6a3b;
+}
+
+.result-flag.bad {
+  background: #fde9df;
+  border: 1px solid #e1b6a6;
+  color: #8a3b20;
+}
+
+.explain-box {
+  border: 1px dashed #d9ccb4;
+  border-radius: 10px;
+  padding: 10px;
+  background: #fffcf7;
+}
+
+.explain-box h4 {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+.explain-box p {
+  margin: 0;
+  line-height: 1.65;
+}
 </style>

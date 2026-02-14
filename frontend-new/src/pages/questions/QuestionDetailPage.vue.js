@@ -90,6 +90,7 @@ debugger; /* PartiallyEnd: #3632/scriptSetup.vue */
 const __VLS_ctx = {};
 let __VLS_components;
 let __VLS_directives;
+/** @type {__VLS_StyleScopedClasses['form']} */ ;
 // CSS variable injection 
 // CSS variable injection end 
 __VLS_asFunctionalElement(__VLS_intrinsicElements.section, __VLS_intrinsicElements.section)({
@@ -148,7 +149,9 @@ for (const [b] of __VLS_getVForSourceType((__VLS_ctx.banks))) {
     });
     (b.name);
 }
-__VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+    ...{ class: "full" },
+});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.textarea)({
     value: (__VLS_ctx.form.text),
@@ -161,19 +164,25 @@ __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
     required: true,
 });
 (__VLS_ctx.form.answer);
-__VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+    ...{ class: "full" },
+});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.textarea)({
     value: (__VLS_ctx.form.explanation),
     rows: "4",
 });
-__VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+    ...{ class: "full" },
+});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
     placeholder: "如: SQL,索引",
 });
 (__VLS_ctx.tagText);
-__VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.label, __VLS_intrinsicElements.label)({
+    ...{ class: "full" },
+});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.textarea)({
     value: (__VLS_ctx.optionText),
@@ -181,7 +190,7 @@ __VLS_asFunctionalElement(__VLS_intrinsicElements.textarea)({
     placeholder: "\u0041\u002e\u0020\u9009\u9879\u4e00\u005c\u006e\u0042\u002e\u0020\u9009\u9879\u4e8c",
 });
 __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
-    ...{ class: "row" },
+    ...{ class: "row full" },
 });
 __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElements.button)({
     ...{ class: "btn" },
@@ -194,7 +203,12 @@ __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElement
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
 /** @type {__VLS_StyleScopedClasses['form']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
 /** @type {__VLS_StyleScopedClasses['row']} */ ;
+/** @type {__VLS_StyleScopedClasses['full']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
 var __VLS_dollars;
 const __VLS_self = (await import('vue')).defineComponent({

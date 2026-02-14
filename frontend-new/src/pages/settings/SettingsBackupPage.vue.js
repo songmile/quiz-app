@@ -1,4 +1,4 @@
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { createAppBackup, getBackupJobStatus, getSettings, listBackupFiles, restoreAppBackup, updateDataPath } from "../../api/settings";
 const BACKUP_POLL_INTERVAL_MS = 1500;
 const BACKUP_POLL_TIMEOUT_MS = 180000;
@@ -10,6 +10,39 @@ const restoreFilename = ref("");
 const dataPath = ref("");
 const backupPolling = ref(false);
 const backupJobNo = ref("");
+function asRecord(value) {
+    return value && typeof value === "object" ? value : null;
+}
+const resultObject = computed(() => asRecord(result.value));
+const resultKind = computed(() => {
+    const obj = resultObject.value;
+    if (!obj)
+        return "";
+    if (obj.jobNo)
+        return "job";
+    if (obj.stats)
+        return "restore";
+    if (obj.path)
+        return "path";
+    return "generic";
+});
+const restoreSummary = computed(() => {
+    const obj = resultObject.value || {};
+    const stats = (obj.stats || {});
+    const rows = Object.values(stats).reduce((sum, v) => sum + Number(v || 0), 0);
+    const rollback = (obj.rollback || {}).filename || "-";
+    return {
+        tables: Object.keys(stats).length,
+        rows,
+        rollback: String(rollback)
+    };
+});
+const scalarEntries = computed(() => {
+    const obj = resultObject.value || {};
+    return Object.entries(obj)
+        .filter(([, value]) => value === null || ["string", "number", "boolean"].includes(typeof value))
+        .map(([key, value]) => ({ key, value: String(value ?? "-") }));
+});
 let backupPollTimer = null;
 let backupPollStartedAt = 0;
 async function load() {
@@ -84,7 +117,7 @@ async function backup() {
     error.value = "";
     try {
         const job = await createAppBackup();
-        result.value = job;
+        result.value = { ...job };
         backupJobNo.value = job.jobNo;
         backupPolling.value = true;
         backupPollStartedAt = Date.now();
@@ -152,7 +185,9 @@ __VLS_asFunctionalElement(__VLS_intrinsicElements.button, __VLS_intrinsicElement
     disabled: (__VLS_ctx.loading),
 });
 if (__VLS_ctx.backupPolling) {
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({});
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.span, __VLS_intrinsicElements.span)({
+        ...{ class: "job-badge" },
+    });
     (__VLS_ctx.backupJobNo);
 }
 __VLS_asFunctionalElement(__VLS_intrinsicElements.input)({
@@ -182,17 +217,104 @@ if (__VLS_ctx.error) {
     });
     (__VLS_ctx.error);
 }
-if (__VLS_ctx.result) {
+if (__VLS_ctx.resultObject) {
     __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
         ...{ class: "panel" },
     });
-    __VLS_asFunctionalElement(__VLS_intrinsicElements.pre, __VLS_intrinsicElements.pre)({});
-    (JSON.stringify(__VLS_ctx.result, null, 2));
+    __VLS_asFunctionalElement(__VLS_intrinsicElements.h3, __VLS_intrinsicElements.h3)({});
+    if (__VLS_ctx.resultKind === 'job') {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-grid top-gap" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-item" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+        (__VLS_ctx.resultObject.jobNo);
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-item" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+        (__VLS_ctx.resultObject.status);
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-item" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+        (__VLS_ctx.resultObject.retryCount);
+        (__VLS_ctx.resultObject.maxRetries);
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-item" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+        (__VLS_ctx.resultObject.filename || "-");
+    }
+    else if (__VLS_ctx.resultKind === 'restore') {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-grid top-gap" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-item" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+        (__VLS_ctx.resultObject.filename);
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-item" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+        (__VLS_ctx.restoreSummary.tables);
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-item" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+        (__VLS_ctx.restoreSummary.rows);
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-item" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+        (__VLS_ctx.restoreSummary.rollback);
+    }
+    else if (__VLS_ctx.resultKind === 'path') {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-grid top-gap" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-item" },
+        });
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+        (__VLS_ctx.resultObject.path);
+    }
+    else {
+        __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+            ...{ class: "kv-grid top-gap" },
+        });
+        for (const [entry] of __VLS_getVForSourceType((__VLS_ctx.scalarEntries))) {
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+                ...{ class: "kv-item" },
+                key: (entry.key),
+            });
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.small, __VLS_intrinsicElements.small)({});
+            (entry.key);
+            __VLS_asFunctionalElement(__VLS_intrinsicElements.strong, __VLS_intrinsicElements.strong)({});
+            (entry.value);
+        }
+    }
 }
 __VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
     ...{ class: "panel" },
 });
 __VLS_asFunctionalElement(__VLS_intrinsicElements.h3, __VLS_intrinsicElements.h3)({});
+__VLS_asFunctionalElement(__VLS_intrinsicElements.div, __VLS_intrinsicElements.div)({
+    ...{ class: "table-wrap top-gap" },
+});
 __VLS_asFunctionalElement(__VLS_intrinsicElements.table, __VLS_intrinsicElements.table)({
     ...{ class: "table" },
 });
@@ -241,6 +363,7 @@ if (__VLS_ctx.files.length === 0) {
 /** @type {__VLS_StyleScopedClasses['row']} */ ;
 /** @type {__VLS_StyleScopedClasses['wrap']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['job-badge']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
 /** @type {__VLS_StyleScopedClasses['row']} */ ;
@@ -248,7 +371,27 @@ if (__VLS_ctx.files.length === 0) {
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
+/** @type {__VLS_StyleScopedClasses['kv-item']} */ ;
 /** @type {__VLS_StyleScopedClasses['panel']} */ ;
+/** @type {__VLS_StyleScopedClasses['table-wrap']} */ ;
+/** @type {__VLS_StyleScopedClasses['top-gap']} */ ;
 /** @type {__VLS_StyleScopedClasses['table']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
 var __VLS_dollars;
@@ -257,12 +400,15 @@ const __VLS_self = (await import('vue')).defineComponent({
         return {
             loading: loading,
             error: error,
-            result: result,
             files: files,
             restoreFilename: restoreFilename,
             dataPath: dataPath,
             backupPolling: backupPolling,
             backupJobNo: backupJobNo,
+            resultObject: resultObject,
+            resultKind: resultKind,
+            restoreSummary: restoreSummary,
+            scalarEntries: scalarEntries,
             load: load,
             backup: backup,
             restore: restore,
